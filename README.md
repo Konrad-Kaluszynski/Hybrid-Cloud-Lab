@@ -1,53 +1,121 @@
-# Hybrid Cloud Project | Phase 01: Infrastructure & Networking
+---
 
-## 📌 Project Overview
-This project documents the architectural design and deployment of a **Nested Virtualization Lab**. The environment is designed to simulate a hybrid cloud infrastructure, focusing on advanced networking, resource isolation, and enterprise-grade virtualization management.
+# Hybrid Cloud Lab: Nested Virtualization & Security Gateway
+
+## 🚀 Overview
+
+This repository contains the architectural design, network configuration, and automation scripts for a **Nested Proxmox Cluster** deployed on a Hetzner Dedicated server. The project demonstrates advanced skills in Layer 3 networking, firewall automation, and enterprise-grade virtualization.
 
 ## 🛠 Technology Stack
-* **Hypervisor:** VMware ESXi / Proxmox
-* **Orchestration:** VMware vCenter Server
-* **Network Services:** pfSense / VyOS (Routing, Firewall, DHCP, DNS)
-* **Storage:** Shared Storage (iSCSI/NFS) for klastrowanie (HA/vMotion)
+
+* **L0 Hypervisor:** Proxmox VE (Physical)
+* **L1 Compute:** 4x Nested Proxmox Nodes (High-Availability Cluster)
+* **Networking:** Iptables (Stateful Firewall), WireGuard (VPN), Tailscale (OOB Management)
+* **Monitoring:** Zabbix (Active/Passive Agent Integration)
+* **OS:** Debian/Fedora/Windows Server (DC)
 
 ---
 
-## 🌐 Network Segmentation & Topology
-To ensure security and traffic isolation, the environment is divided into specific logical segments (VLANs).
+## 📊 Lab Topology
 
-### IP Address Management (IPAM)
-| Segment | Network ID | VLAN ID | Purpose |
-| :--- | :--- | :--- | :--- |
-| **Management** | `10.0.10.0/24` | 10 | ESXi Management, vCenter, Infrastructure Tools |
-| **vMotion** | `10.0.20.0/24` | 20 | Live migration traffic between nested hosts |
-| **Storage** | `10.0.30.0/24` | 30 | Dedicated backend for iSCSI/NFS shared storage |
-| **Provisioning**| `10.0.40.0/24` | 40 | Deployment of new VMs and PXE booting |
-| **Workload** | `192.168.100.0/24`| 100 | General application and VM traffic |
+The diagram below illustrates the flow from the public Internet through the security gateway to the isolated nested segments.
+
+```mermaid
+graph TD
+    subgraph Internet_Cloud [Internet / Hetzner Network]
+        Public_IP[138.201.192.241/26]
+    end
+
+    subgraph Physical_Host_L0 [Physical Proxmox L0 - Hetzner Dedicated]
+        enp[enp0s31f6] --- vmbr0
+        vmbr0[vmbr0: WAN Bridge]
+        ts[Tailscale: 100.108.238.89]
+        vmbr1[vmbr1: Management 1.1.1.252/24]
+        vmbr2[vmbr2: Cluster Sync]
+        vmbr3[vmbr3: Isolated Storage]
+    end
+
+    subgraph L1_Virtual_Network [L1 Virtual Machines]
+        router[ID 254: router-01 - Security Gateway]
+        p-node1[ID 250: nested-proxmox-01 .253]
+        p-node2[ID 252: nested-proxmox-02 .54]
+        p-node3[ID 251: nested-proxmox-03 .55]
+        p-nodeB[ID 253: BIG-nested-proxmox]
+    end
+
+    %% Connections
+    Public_IP --- vmbr0
+    vmbr0 --- router
+    router --- vmbr1
+    vmbr1 --- p-node1
+    vmbr1 --- p-node2
+    vmbr1 --- p-node3
+    vmbr1 --- p-nodeB
+    
+    %% Multihome for Nested Nodes
+    p-node1 --- vmbr2
+    p-node2 --- vmbr2
+    p-node3 --- vmbr2
+
+```
 
 ---
 
-## ⚙️ Phase 01: Core Infrastructure Setup
+## 🌐 Networking & Segmentation
 
-### 1. Physical/Base Hypervisor Configuration
-* **Nested Virtualization:** Hardware-assisted virtualization (VT-x/AMD-V) exposed to the Guest OS.
-* **Virtual Switches:** Standard or Distributed Switch configured with **Promiscuous Mode** and **Forged Transmits** set to *Accept* (required for nested ESXi connectivity).
-* **MTU Settings:** Jumbo Frames (9000 MTU) enabled for the Storage and vMotion segments to optimize performance.
-
-### 2. Network Services Layer
-* Deployment of a virtualized router/firewall to act as the **Default Gateway**.
-* Configuration of **Inter-VLAN Routing** and Firewall rules to restrict access between segments (Hardening).
-* Setup of local **DNS (A/PTR records)** to ensure successful vCenter and ESXi integration.
-
-### 3. Storage Architecture
-* Initial setup of a shared storage target.
-* Mapping LUNs to nested ESXi hosts to enable **High Availability (HA)** and **Distributed Resource Scheduler (DRS)** in later phases.
+| Segment | Network ID | Interface | Purpose |
+| --- | --- | --- | --- |
+| **WAN** | `138.201.192.x` | `ens18` | Public Egress / External Access |
+| **MGMT** | `1.1.1.0/24` | `ens19` | Infrastructure & Proxmox GUI Management |
+| **DC** | `192.168.0.0/24` | `ens20` | Internal Workloads (Active Directory, Zabbix) |
+| **VPN** | `10.10.10.0/24` | `wg0` | Encrypted Administrative Access |
 
 ---
 
-## 🚀 Future Roadmap
-- [ ] **Phase 02:** Automated deployment of Nested ESXi hosts using Kickstart.
-- [ ] **Phase 03:** vCenter Cluster configuration and HA/DRS testing.
-- [ ] **Phase 04:** Integration of Ansible for automated VM provisioning.
+## 🛡️ Firewall Automation (`iptables`)
+
+The core of the security gateway is managed via a custom Bash script (`apply_firewall.sh`) found in the `scripts/` directory.
+
+### Key Features:
+
+* **Stateful Inspection:** Default `DROP` policy with granular `ACCEPT` rules for established connections.
+* **Dynamic Whitelisting:** Uses `ipset` to load trusted source IPs from an external file, preventing unauthorized SSH/GUI access attempts.
+* **DNAT (Port Forwarding):** Maps external high-range ports to internal nested Proxmox nodes (e.g., WAN:984 -> NodeB:8006).
+* **MTU Optimization:** Implements TCP MSS Clamping (`--clamp-mss-to-pmtu`) to ensure stable traffic through nested tunnels and VPN interfaces.
 
 ---
-**Author:** Konrad Kałuszyński  
-**Status:** Phase 01 Completed / Documentation Updated
+
+## 📝 Implementation Highlights
+
+### 1. Nested Virtualization Tweak
+
+To allow L1 Proxmox nodes to host their own VMs, the L0 host is configured to expose hardware-assisted virtualization:
+
+```bash
+# Example configuration on L0 for nested nodes
+args: -cpu host,kvm=on
+
+```
+
+### 2. Zabbix Monitoring Integration
+
+The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the Data Center segment and the Management segment, enabling full-stack visibility of both physical and virtual layers.
+
+---
+
+## 📂 Repository Structure
+
+* `architecture/`: High-resolution diagrams and network maps.
+* `scripts/router/`: Firewall and routing automation scripts.
+* `docs/`: Detailed phase-by-phase implementation notes.
+
+---
+
+**Author:** Konrad Kałuszyński
+
+**Role:** IT Systems Engineer / L3 Support Engineer
+
+**Status:** Active Lab Environment
+
+---
+
