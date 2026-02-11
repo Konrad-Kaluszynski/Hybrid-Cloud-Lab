@@ -121,11 +121,3 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use, mod
 **Role:** IT Systems Engineer / L3 Support Engineer  
 **Status:** Active Lab Environment  
 ```
-
-### Important Notes
-
-- Ensure that the **Mermaid** block is enclosed within triple backticks (```) and is immediately followed by the word `mermaid`, as shown above.
-- After making these changes, commit the README to your repository, and GitHub should automatically render the Mermaid diagram.
-- If there are still issues with rendering, check if GitHub's Markdown preview renders it correctly in your account, as features may vary slightly based on account settings or tools.
-
-This setup should allow the diagram to be generated automatically and displayed directly in GitHub!
