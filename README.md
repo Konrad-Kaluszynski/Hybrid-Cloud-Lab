@@ -1,5 +1,3 @@
-
-```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
 ## 🚀 Overview
@@ -56,68 +54,3 @@ graph TD
     p-node1 --- vmbr2
     p-node2 --- vmbr2
     p-node3 --- vmbr2
-
-```
-
----
-
-## 🌐 Networking & Segmentation
-
-| Segment | Network ID | Interface | Purpose |
-| --- | --- | --- | --- |
-| **WAN** | `138.201.192.x` | `ens18` | Public Egress / External Access |
-| **MGMT** | `1.1.1.0/24` | `ens19` | Infrastructure & Proxmox GUI Management |
-| **DC** | `192.168.0.0/24` | `ens20` | Internal Workloads (Active Directory, Zabbix) |
-| **VPN** | `10.10.10.0/24` | `wg0` | Encrypted Administrative Access |
-
----
-
-## 🛡️ Firewall Automation (`iptables`)
-
-The core of the security gateway is managed via a custom Bash script (`apply_firewall.sh`) found in the `scripts/` directory.
-
-### Key Features:
-
-* **Stateful Inspection:** Default `DROP` policy.
-* **Dynamic Whitelisting:** Uses `ipset` for trusted source IPs.
-* **MTU Optimization:** TCP MSS Clamping for nested tunnels.
-
----
-
-## 📝 Implementation Highlights
-
-### 1. Nested Virtualization Tweak
-
-```bash
-# Example configuration on L0 for nested nodes
-args: -cpu host,kvm=on
-
-```
-
-### 2. Zabbix Monitoring Integration
-
-The firewall allows traffic for Zabbix (Port `10050/10051`) between segments.
-
----
-
-## 📂 Repository Structure
-
-* `architecture/`: High-resolution diagrams.
-* `scripts/router/`: Firewall automation.
-* `docs/`: Implementation notes.
-
----
-
-**Author:** Konrad Kałuszyński
-
-**Role:** IT Systems Engineer / L3 Support Engineer
-
-**Status:** Active Lab Environment
-
-```
-
-
-
-Does the diagram appear correctly in the GitHub preview now? If not, check if there are any trailing spaces after the ` ```mermaid ` line.
-
-```
