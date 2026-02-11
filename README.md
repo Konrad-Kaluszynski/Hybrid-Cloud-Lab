@@ -55,6 +55,7 @@ graph TD
     p-node1 --- vmbr2
     p-node2 --- vmbr2
     p-node3 --- vmbr2
+
 ```
 
 ---
@@ -92,6 +93,7 @@ To allow L1 Proxmox nodes to host their own VMs, the L0 host is configured to ex
 ```bash
 # Example configuration on L0 for nested nodes
 args: -cpu host,kvm=on
+
 ```
 
 ### 2. Zabbix Monitoring Integration
@@ -109,8 +111,13 @@ The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the
 ---
 
 **Author:** Konrad Kałuszyński
-
 **Role:** IT Systems Engineer / L3 Support Engineer
-
 **Status:** Active Lab Environment
+
+```
+
+
+
+Would you like me to help you write a specific GitHub Action to automatically validate this Mermaid syntax whenever you push changes?
+
 ```
