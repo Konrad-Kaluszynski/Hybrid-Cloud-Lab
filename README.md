@@ -1,3 +1,4 @@
+
 ```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
@@ -120,6 +121,6 @@ The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the
 
 
 
-Does the GitHub preview show the graph correctly now? If you need a more visual representation for your `architecture/` folder, would you like me to generate a high-resolution image of this topology for you?
+Does the diagram render correctly for you now? If it still fails, I can provide a **static SVG version** of the diagram that you can host in the `architecture/` folder instead of relying on the Mermaid parser.
 
 ```
