@@ -1,4 +1,3 @@
-
 ```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
