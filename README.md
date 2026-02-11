@@ -1,6 +1,3 @@
-If you are still seeing the code block instead of a rendered diagram, it is because your previous version contained **hidden Unicode characters** (specifically non-breaking spaces) that break the GitHub Mermaid parser.
-
-The version below is cleaned of all "junk" characters and uses standard 4-space indentation, which is the gold standard for Mermaid compatibility.
 
 ```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
@@ -79,13 +76,17 @@ graph TD
 
 The core of the security gateway is managed via a custom Bash script (`apply_firewall.sh`) found in the `scripts/` directory.
 
+### Key Features:
+
+* **Stateful Inspection:** Default `DROP` policy.
+* **Dynamic Whitelisting:** Uses `ipset` for trusted source IPs.
+* **MTU Optimization:** TCP MSS Clamping for nested tunnels.
+
 ---
 
 ## 📝 Implementation Highlights
 
 ### 1. Nested Virtualization Tweak
-
-To allow L1 Proxmox nodes to host their own VMs, the L0 host is configured to expose hardware-assisted virtualization:
 
 ```bash
 # Example configuration on L0 for nested nodes
@@ -95,26 +96,28 @@ args: -cpu host,kvm=on
 
 ### 2. Zabbix Monitoring Integration
 
-The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the Data Center segment and the Management segment, enabling full-stack visibility of both physical and virtual layers.
+The firewall allows traffic for Zabbix (Port `10050/10051`) between segments.
 
 ---
 
 ## 📂 Repository Structure
 
-* `architecture/`: High-resolution diagrams and network maps.
-* `scripts/router/`: Firewall and routing automation scripts.
-* `docs/`: Detailed phase-by-phase implementation notes.
+* `architecture/`: High-resolution diagrams.
+* `scripts/router/`: Firewall automation.
+* `docs/`: Implementation notes.
 
 ---
 
 **Author:** Konrad Kałuszyński
+
 **Role:** IT Systems Engineer / L3 Support Engineer
+
 **Status:** Active Lab Environment
 
 ```
 
 
 
-Would you like me to help you configure the **WireGuard** or **Tailscale** routing logic to ensure your OOB management works through the gateway?
+Does the diagram appear correctly in the GitHub preview now? If not, check if there are any trailing spaces after the ` ```mermaid ` line.
 
 ```
