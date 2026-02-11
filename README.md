@@ -1,3 +1,4 @@
+```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
 ## 🚀 Overview
@@ -55,30 +56,9 @@ graph TD
     p-node2 --- vmbr2
     p-node3 --- vmbr2
 
-
-I see exactly what happened. When you copied the previous response, it merged the text and the Mermaid code into a single messy block, and the "backticks" (` ` `) that trigger the diagram were broken or incorrectly spaced.
-
-For GitHub to render the diagram, the `mermaid` tag **must** be on its own line, and there **must** be a line break after the diagram code.
-
-Copy the raw text from the block below. **Do not modify the spacing inside the mermaid block.**
-
-```markdown
-# Hybrid Cloud Lab: Nested Virtualization & Security Gateway
-
-## 🚀 Overview
-
-This repository contains the architectural design, network configuration, and automation scripts for a **Nested Proxmox Cluster** deployed on a Hetzner Dedicated server. The project demonstrates advanced skills in Layer 3 networking, firewall automation, and enterprise-grade virtualization.
-
-## 🛠 Technology Stack
-
-* **L0 Hypervisor:** Proxmox VE (Physical)
-* **L1 Compute:** 4x Nested Proxmox Nodes (High-Availability Cluster)
-* **Networking:** Iptables (Stateful Firewall), WireGuard (VPN), Tailscale (OOB Management)
-* **Monitoring:** Zabbix (Active/Passive Agent Integration)
-* **OS:** Debian/Fedora/Windows Server (DC)
+```
 
 ---
-
 
 ## 🌐 Networking & Segmentation
 
@@ -97,15 +77,18 @@ The core of the security gateway is managed via a custom Bash script (`apply_fir
 
 ### Key Features:
 
-* **Stateful Inspection:** Default `DROP` policy.
-* **Dynamic Whitelisting:** Uses `ipset` for trusted source IPs.
-* **MTU Optimization:** TCP MSS Clamping for nested tunnels.
+* **Stateful Inspection:** Default `DROP` policy with granular `ACCEPT` rules.
+* **Dynamic Whitelisting:** Uses `ipset` to load trusted source IPs.
+* **DNAT (Port Forwarding):** Maps external high-range ports to internal nodes.
+* **MTU Optimization:** Implements TCP MSS Clamping (`--clamp-mss-to-pmtu`).
 
 ---
 
 ## 📝 Implementation Highlights
 
 ### 1. Nested Virtualization Tweak
+
+To allow L1 Proxmox nodes to host their own VMs, the L0 host is configured to expose hardware-assisted virtualization:
 
 ```bash
 # Example configuration on L0 for nested nodes
@@ -115,15 +98,15 @@ args: -cpu host,kvm=on
 
 ### 2. Zabbix Monitoring Integration
 
-The firewall allows traffic for Zabbix (Port `10050/10051`) between segments.
+The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the Data Center segment and the Management segment.
 
 ---
 
 ## 📂 Repository Structure
 
-* `architecture/`: High-resolution diagrams.
-* `scripts/router/`: Firewall automation.
-* `docs/`: Implementation notes.
+* `architecture/`: High-resolution diagrams and network maps.
+* `scripts/router/`: Firewall and routing automation scripts.
+* `docs/`: Detailed phase-by-phase implementation notes.
 
 ---
 
@@ -136,3 +119,12 @@ The firewall allows traffic for Zabbix (Port `10050/10051`) between segments.
 ```
 
 
+
+**Why this works:**
+1.  **Strict Newlines:** I added empty lines before and after every code block.
+2.  **No Indentation on Code Fences:** Ensure the backticks (\` \` \`) start at the very beginning of the line.
+3.  **Sanitized Text:** I removed any potential hidden characters that might have been copied from the previous chat bubble.
+
+Would you like me to create a **GitHub Page** configuration for this repo so you can host a live version of the architecture documentation?
+
+```
