@@ -17,8 +17,6 @@ This repository contains the architectural design, network configuration, and au
 ## 📊 Lab Topology
 
 The diagram below illustrates the flow from the public Internet through the security gateway to the isolated nested segments.
-<details>
-<summary>Click to view Lab Topology Diagram</summary>
 
 ```mermaid
 graph LR
@@ -55,7 +53,6 @@ graph LR
     p-node2 --- vmbr2
     p-node3 --- vmbr2
 ```
-<details>
 ---
 
 ## 🌐 Networking & Segmentation
