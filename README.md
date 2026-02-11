@@ -1,3 +1,9 @@
+Understood—keeping it strictly text-based for your README.
+
+The issue with the "non-generating" version was indeed the whitespace. It contained **non-breaking spaces** (hex `A0`) instead of standard spaces (hex `20`). Mermaid interpreters on GitHub will fail if they encounter those characters.
+
+Here is the clean, standard-space version of your `README.md`. You can copy this directly into your file:
+
 ```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
@@ -116,3 +122,6 @@ The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the
 
 ```
 
+Would you like me to review the `apply_firewall.sh` script logic as well to ensure the NAT rules match this topology?
+
+```
