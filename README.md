@@ -1,8 +1,6 @@
-Understood—keeping it strictly text-based for your README.
+If you are still seeing the code block instead of a rendered diagram, it is because your previous version contained **hidden Unicode characters** (specifically non-breaking spaces) that break the GitHub Mermaid parser.
 
-The issue with the "non-generating" version was indeed the whitespace. It contained **non-breaking spaces** (hex `A0`) instead of standard spaces (hex `20`). Mermaid interpreters on GitHub will fail if they encounter those characters.
-
-Here is the clean, standard-space version of your `README.md`. You can copy this directly into your file:
+The version below is cleaned of all "junk" characters and uses standard 4-space indentation, which is the gold standard for Mermaid compatibility.
 
 ```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
@@ -81,13 +79,6 @@ graph TD
 
 The core of the security gateway is managed via a custom Bash script (`apply_firewall.sh`) found in the `scripts/` directory.
 
-### Key Features:
-
-* **Stateful Inspection:** Default `DROP` policy with granular `ACCEPT` rules for established connections.
-* **Dynamic Whitelisting:** Uses `ipset` to load trusted source IPs from an external file, preventing unauthorized SSH/GUI access attempts.
-* **DNAT (Port Forwarding):** Maps external high-range ports to internal nested Proxmox nodes (e.g., WAN:984 -> NodeB:8006).
-* **MTU Optimization:** Implements TCP MSS Clamping (`--clamp-mss-to-pmtu`) to ensure stable traffic through nested tunnels and VPN interfaces.
-
 ---
 
 ## 📝 Implementation Highlights
@@ -122,6 +113,8 @@ The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the
 
 ```
 
-Would you like me to review the `apply_firewall.sh` script logic as well to ensure the NAT rules match this topology?
+
+
+Would you like me to help you configure the **WireGuard** or **Tailscale** routing logic to ensure your OOB management works through the gateway?
 
 ```
