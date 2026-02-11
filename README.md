@@ -1,3 +1,4 @@
+
 ```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
@@ -120,11 +121,6 @@ The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the
 
 
 
-**Why this works:**
-1.  **Strict Newlines:** I added empty lines before and after every code block.
-2.  **No Indentation on Code Fences:** Ensure the backticks (\` \` \`) start at the very beginning of the line.
-3.  **Sanitized Text:** I removed any potential hidden characters that might have been copied from the previous chat bubble.
-
-Would you like me to create a **GitHub Page** configuration for this repo so you can host a live version of the architecture documentation?
+Does the GitHub preview show the graph correctly now? If you need a more visual representation for your `architecture/` folder, would you like me to generate a high-resolution image of this topology for you?
 
 ```
