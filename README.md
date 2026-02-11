@@ -1,4 +1,3 @@
-```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
 ## 🚀 Overview
@@ -57,4 +56,3 @@ graph TD
     p-node2 --- vmbr2
     p-node3 --- vmbr2
 
-```
