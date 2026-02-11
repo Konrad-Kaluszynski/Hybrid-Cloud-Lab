@@ -116,8 +116,3 @@ The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the
 
 ```
 
-
-
-Would you like me to help you write a specific GitHub Action to automatically validate this Mermaid syntax whenever you push changes?
-
-```
