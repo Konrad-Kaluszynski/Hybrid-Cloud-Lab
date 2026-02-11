@@ -86,8 +86,9 @@ The core of the security gateway is managed via a custom Bash script (`apply_fir
 To allow L1 Proxmox nodes to host their own VMs, the L0 host is configured to expose hardware-assisted virtualization:
 
 # Example configuration on L0 for nested nodes
+```bash
 args: -cpu host,kvm=on
-
+```
 
 ### 2. Zabbix Monitoring Integration
 
