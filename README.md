@@ -91,11 +91,9 @@ The core of the security gateway is managed via a custom Bash script (`apply_fir
 
 To allow L1 Proxmox nodes to host their own VMs, the L0 host is configured to expose hardware-assisted virtualization:
 
-```bash
 # Example configuration on L0 for nested nodes
 args: -cpu host,kvm=on
 
-```
 
 ### 2. Zabbix Monitoring Integration
 
@@ -117,10 +115,3 @@ The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the
 
 **Status:** Active Lab Environment
 
-```
-
-
-
-Does the diagram render correctly for you now? If it still fails, I can provide a **static SVG version** of the diagram that you can host in the `architecture/` folder instead of relying on the Mermaid parser.
-
-```
