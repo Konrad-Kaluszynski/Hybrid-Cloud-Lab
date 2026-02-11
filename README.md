@@ -18,6 +18,7 @@ This repository contains the architectural design, network configuration, and au
 ## 📊 Lab Topology
 
 The diagram below illustrates the flow from the public Internet through the security gateway to the isolated nested segments.
+```
 
 ```mermaid
 graph TD
