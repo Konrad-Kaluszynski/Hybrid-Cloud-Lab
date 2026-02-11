@@ -1,16 +1,17 @@
+```markdown
 # Hybrid Cloud Lab: Nested Virtualization & Security Gateway
 
 ## 🚀 Overview
 
-This repository contains the architectural design, network configuration, and automation scripts for a **Nested Proxmox Cluster** deployed on a Hetzner Dedicated server. The project demonstrates advanced skills in Layer 3 networking, firewall automation, and enterprise-grade virtualization.
+This repository contains the architectural design, network configuration, and automation scripts for a **Nested Proxmox Cluster** deployed on a Hetzner Dedicated server. It showcases advanced skills in **Layer 3 networking**, **firewall automation**, and **enterprise-grade virtualization**.
 
 ## 🛠 Technology Stack
 
-* **L0 Hypervisor:** Proxmox VE (Physical)
-* **L1 Compute:** 4x Nested Proxmox Nodes (High-Availability Cluster)
-* **Networking:** Iptables (Stateful Firewall), WireGuard (VPN), Tailscale (OOB Management)
-* **Monitoring:** Zabbix (Active/Passive Agent Integration)
-* **OS:** Debian/Fedora/Windows Server (DC)
+- **L0 Hypervisor:** Proxmox VE (Physical)
+- **L1 Compute:** 4x Nested Proxmox Nodes (High-Availability Cluster)
+- **Networking:** Iptables (Stateful Firewall), WireGuard (VPN), Tailscale (OOB Management)
+- **Monitoring:** Zabbix (Active/Passive Agent Integration)
+- **OS:** Debian/Fedora/Windows Server (DC)
 
 ---
 
@@ -54,7 +55,6 @@ graph TD
     p-node1 --- vmbr2
     p-node2 --- vmbr2
     p-node3 --- vmbr2
-
 ```
 
 ---
@@ -70,16 +70,16 @@ graph TD
 
 ---
 
-## 🛡️ Firewall Automation (`iptables`)
+## 🛡️ Firewall Automation
 
-The core of the security gateway is managed via a custom Bash script (`apply_firewall.sh`) found in the `scripts/` directory.
+The core of the security gateway is managed via a custom Bash script (`apply_firewall.sh`) found in the `scripts/router/` directory.
 
 ### Key Features:
 
-* **Stateful Inspection:** Default `DROP` policy with granular `ACCEPT` rules for established connections.
-* **Dynamic Whitelisting:** Uses `ipset` to load trusted source IPs from an external file, preventing unauthorized SSH/GUI access attempts.
-* **DNAT (Port Forwarding):** Maps external high-range ports to internal nested Proxmox nodes (e.g., WAN:984 -> NodeB:8006).
-* **MTU Optimization:** Implements TCP MSS Clamping (`--clamp-mss-to-pmtu`) to ensure stable traffic through nested tunnels and VPN interfaces.
+- **Stateful Inspection:** Default `DROP` policy with granular `ACCEPT` rules.
+- **Dynamic Whitelisting:** Uses `ipset` to manage trusted source IPs.
+- **Port Forwarding:** Maps external ports to nested Proxmox nodes (e.g., WAN:984 → NodeB:8006).
+- **MTU Optimization:** Implements TCP MSS Clamping to ensure stable traffic through nested tunnels and VPN interfaces.
 
 ---
 
@@ -92,28 +92,40 @@ To allow L1 Proxmox nodes to host their own VMs, the L0 host is configured to ex
 ```bash
 # Example configuration on L0 for nested nodes
 args: -cpu host,kvm=on
-
 ```
 
 ### 2. Zabbix Monitoring Integration
 
-The firewall allows specific traffic for Zabbix (Port `10050/10051`) between the Data Center segment and the Management segment, enabling full-stack visibility of both physical and virtual layers.
+The firewall allows specific traffic for Zabbix (Ports `10050/10051`) between the Data Center segment and the Management segment, enabling full-stack visibility of both physical and virtual layers.
 
 ---
 
 ## 📂 Repository Structure
 
-* `architecture/`: High-resolution diagrams and network maps.
-* `scripts/router/`: Firewall and routing automation scripts.
-* `docs/`: Detailed phase-by-phase implementation notes.
+Explore the folders for detailed scripts, architecture diagrams, and documentation.
+
+- `architecture/`: High-resolution diagrams and network maps.
+- `scripts/router/`: Firewall and routing automation scripts.
+- `scripts/automation/`: Additional automation scripts.
+- `docs/`: Implementation notes and usage guides.
 
 ---
 
-**Author:** Konrad Kałuszyński
+## 📜 License
 
-**Role:** IT Systems Engineer / L3 Support Engineer
-
-**Status:** Active Lab Environment
+This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and share!
 
 ---
 
+**Author:** Konrad Kałuszyński  
+**Role:** IT Systems Engineer / L3 Support Engineer  
+**Status:** Active Lab Environment  
+```
+
+### Important Notes
+
+- Ensure that the **Mermaid** block is enclosed within triple backticks (```) and is immediately followed by the word `mermaid`, as shown above.
+- After making these changes, commit the README to your repository, and GitHub should automatically render the Mermaid diagram.
+- If there are still issues with rendering, check if GitHub's Markdown preview renders it correctly in your account, as features may vary slightly based on account settings or tools.
+
+This setup should allow the diagram to be generated automatically and displayed directly in GitHub!
